@@ -1,0 +1,30 @@
+public class WalkSteps : MonoBehaviour
+{
+
+    private AudioSource audio;
+    public AudioClip Ground, Water;
+    public LayerMask groundLayer, waterLayer;
+    public Transform checkPoint;
+
+
+    void Start()
+    {
+        audio = GetComponent<AudioSource>();
+    }
+
+
+    void SoundWalk()
+    {
+        if(Physics.Raycast(checkPoint.position, Vector3.down, 0.1f, groundLayer))
+        {
+            audio.PlayOneShot(Ground, 0.2f);
+        }
+        else if (Physics.Raycast(checkPoint.position, Vector3.down, 0.1f, waterLayer))
+        {
+            audio.PlayOneShot(Water, 0.2f);
+        }
+
+    }
+
+
+}
