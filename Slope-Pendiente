@@ -1,0 +1,142 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+[RequireComponent(typeof(Rigidbody2D))]
+public class PlayerCtrl : MonoBehaviour
+{
+    //velocidad del personaje
+    [SerializeField] float speedMove;
+
+    //rigidBody del personaje
+    Rigidbody2D rb;
+
+    //configuracion de caida
+    [SerializeField] float ActualFall;
+    [SerializeField] float fallResistance;
+    [SerializeField] float fallFall;
+
+    //Longitud de los rayos, el que checa la pendiente (rojo)
+    [SerializeField] float rayLongSlope;
+    //el que checa el suelo (azul)
+    [SerializeField] float rayGround;
+
+    //La capa de la pendiente que queremos checar
+    [SerializeField] LayerMask slopeLayerMask;
+    //la capa del suelo
+    [SerializeField] LayerMask groundLayerMask;
+
+    //Los GameObj desde donde empieza el rayo
+    //para checar el suelo
+    [SerializeField] GameObject groundPoint;
+    //Para checar la pendinte
+    [SerializeField] GameObject slopePoint;
+
+    //el start donde llamamos el rigidBody para poder usarlo
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    // Update donde llamamos el movimiento del personaje
+    void Update()
+    {
+        PlayerMovement();
+        
+    }
+    //el metodo del movimiento del personaje
+    void PlayerMovement()
+    { 
+        //Mover al personajes con los Axis horizontales
+        float h = Input.GetAxis("Horizontal");
+        
+        //creamos un vector dos donde añadimos el vector.X el INPUT + la velocidad de movimiento
+        Vector2 toMove = new Vector2(h * speedMove, 0f);
+        //añadimos velocidad al rigidBody que es el vector anterior que creamos
+        rb.velocity = toMove;
+
+
+        //si movemos al personaje a la derecha
+        if (h > 0)
+        {
+            
+            //Cambiar Lado hacia el que se Dispara el rayCast
+            AngleSlope(rayLongSlope);
+
+        }
+        //si movemos al personaje a la izquierda
+        else if (h < 0)
+        {
+
+            //Cambiar Lado hacia el que se Dispara el rayCast
+            AngleSlope(-rayLongSlope);
+
+        }
+        //si no movemos al personaje checa si estamos tocando el suelo
+        else
+        {
+            //si no hay suelo caemos con la velocidad de [fall fall]
+            CheckGround(fallFall);
+        }
+
+
+    }
+    //rayo para checar la pendiente, la clase es bool para poder devolver un true o false
+    bool RaySlopeCheck(float sideRay)
+    {
+        //Lazamos el rayo y checamos si hay una pendiente
+        RaycastHit2D hit = Physics2D.Raycast(slopePoint.transform.position, Vector2.right, sideRay, slopeLayerMask);
+        //dibujamos un rayo en la escena para poder verlo y configurarlo
+        Debug.DrawRay(slopePoint.transform.position, Vector2.right * sideRay, Color.red);
+        //devolvemos TRUE si tocamos la pendiente con el rayo - entonces falso es si el rayo no encuentra una pendinte
+        return hit;
+    }
+    //configuracion de la caida
+    void FallGravity(float gravity)
+    {
+        //creamos un vector2 para configurar caer en el vector.y en negativo
+        Vector2 fall = new Vector2(0, -gravity);
+        //y agregamos ese vector de caida al rigidBody para que caiga
+        rb.AddForce(fall);
+    }
+
+    //Configuracion de la resistencia de subida de las pendientes
+    void AngleSlope(float sideRay)
+    {
+        //si, nuestra clase bool que checa si hemos tocado una pendiente es TRUE
+        if (RaySlopeCheck(sideRay))
+        {
+            //llamamos a la clase que checa si hay suelo y configura la caida
+            //la caidaa en estecas cambia a la resistencia
+            CheckGround(fallResistance);
+            
+        } 
+
+    }
+    //checar suelo y configurar caida
+    void CheckGround(float actualFall)
+    {
+        //otro rayo para checar si hay suelo
+        RaycastHit2D hit = Physics2D.Raycast(groundPoint.transform.position, Vector2.down, rayGround, groundLayerMask);
+        //dibujamos rayo para mejor configuracion dsde la escena
+        Debug.DrawRay(transform.position, Vector2.down * rayGround, Color.blue);
+
+        //si NO hay suelo 
+        if (!hit)
+        {
+            //la caida de gravedad es [LA QUE CONFIGUREMOS]
+            FallGravity(actualFall);
+
+        }
+        //este no es necesario pero nos ayuda a ver en el inspector la actual caida
+        //y poder checar si todo esta bien, otra opcion seria imprimirlo en la consola
+        this.ActualFall = actualFall;
+        
+        
+    }
+
+    
+
+
+}//Class
