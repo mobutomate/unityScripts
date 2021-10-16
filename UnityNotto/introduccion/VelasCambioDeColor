@@ -1,0 +1,65 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+public class Velas : MonoBehaviour
+{
+    [SerializeField] private Material velas;
+    [SerializeField] private Color color1;
+    [SerializeField] private Color color2;
+    [SerializeField] private bool pickColor = false;
+    [SerializeField] private float value;
+    
+    [SerializeField] private float tiempo;
+    
+    
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+        
+        
+        if (!pickColor)
+        {
+            ColorLerp(color1, color2, value += tiempo * Time.deltaTime);
+            if (value >= 1)
+            {
+                pickColor = !pickColor;
+                
+            }
+        }
+        else
+        {
+            ColorLerp(color1, color2, value -= tiempo * Time.deltaTime);
+            if (value <= 0)
+            {
+                pickColor = !pickColor;
+            }
+        }
+
+
+    }
+    
+    /// <summary>
+    /// Transicion de color
+    /// </summary>
+    /// <param name="option1">Es el color de inicio</param>
+    /// <param name="option2">Es el color final</param>
+    /// <param name="v">valor del inicio y fin</param>
+    void ColorLerp(Color option1, Color option2, float v)
+    {
+        velas.color = Color.Lerp(option1, option2, v);
+        
+    }
+    
+    
+}//class
