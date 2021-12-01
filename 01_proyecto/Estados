@@ -1,0 +1,31 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+[CreateAssetMenu(menuName = "Estados")]
+public class Estados : ScriptableObject
+{
+    [TextArea(14,10)] [SerializeField] private string textoDeLaHistoria;
+    [SerializeField] private Sprite imagenActual;
+    [SerializeField] private Estados[] estados;
+
+    public string AgarrarTextoHistoria()
+    {
+        return textoDeLaHistoria;
+    }
+
+    public Sprite AgarrarSpriteActual()
+    {
+        return imagenActual;
+    }
+
+    public Estados[] AgarrarEstadoActual()
+    {
+        return estados;
+    }
+    
+    
+    
+    
+}//class
