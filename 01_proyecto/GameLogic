@@ -1,57 +1,59 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class AdventureAventura : MonoBehaviour
+public class GameLogic : MonoBehaviour
 {
-    
-    [SerializeField] private Text textComponentStory;
-    [SerializeField] private Image storyImage;
-   
+    [SerializeField] private Text objetoDeTexto;
+    [SerializeField] private Image objetoImagen;
 
-    [SerializeField] private States startingState;
-    private States currentState;
+    [SerializeField] private Estados estadoDeInicio;
+    private Estados estadoActual;
     
+
+
     // Start is called before the first frame update
     void Start()
     {
-        textComponentStory = GameObject.FindWithTag("TextGame").GetComponent<Text>();
-        storyImage = GameObject.FindWithTag("ImageGame").GetComponent<Image>();
+        objetoDeTexto = GameObject.FindWithTag("TextoGame").GetComponent<Text>();
+        objetoImagen = GameObject.FindWithTag("ImagenGame").GetComponent<Image>();
 
-        currentState = startingState;
+        objetoDeTexto.text = estadoDeInicio.AgarrarTextoHistoria();
+        objetoImagen.sprite = estadoDeInicio.AgarrarSpriteActual();
 
-        textComponentStory.text = currentState.GetStory();
-        storyImage.sprite = currentState.GetImageStory();
-
+        estadoActual = estadoDeInicio;
     }
 
     // Update is called once per frame
     void Update()
     {
-        ManageStates();
         
-    }
-    
-    
-    /// <summary>
-    /// Llama al siguiente estado y checa cuantas opciones tenemos para apretar el boton 1, 2 o 3 y pasar a la siguiente parte
-    /// </summary>
-    void ManageStates()
-    {
-        States[] nextState = currentState.GetNextState();
 
-        for (int index = 0; index < nextState.Length; index++)
+
+        EleccionDeEstados();
+    }
+
+    void EleccionDeEstados()
+    {
+        Estados[] siguienteEstadoActivo = estadoActual.AgarrarEstadoActual();
+
+        for (int index = 0; index < siguienteEstadoActivo.Length; index++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + index))
             {
-                currentState = nextState[index];
+                estadoActual = siguienteEstadoActivo[index];
             }
         }
 
-        textComponentStory.text = currentState.GetStory();
-        storyImage.sprite = currentState.GetImageStory();
-    }
+        objetoDeTexto.text = estadoActual.AgarrarTextoHistoria();
+        objetoImagen.sprite = estadoActual.AgarrarSpriteActual();
 
+
+    }
     
-}//class
+    
+    
+    
+}//Class
