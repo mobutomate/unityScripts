@@ -1,0 +1,28 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+[CreateAssetMenu(menuName = "State")]
+public class States : ScriptableObject
+{
+    [TextArea(14,10)] [SerializeField] private string storyText;
+    [SerializeField] private Sprite currentImageStory;
+
+    [SerializeField] private States[] nextState;
+
+    public string GetStory()
+    {
+        return storyText;
+    }
+
+    public Sprite GetImageStory()
+    {
+        return currentImageStory;
+    }
+
+    public States[] GetNextState()
+    {
+        return nextState;
+    }
+
+}//class
