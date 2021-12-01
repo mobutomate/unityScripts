@@ -1,0 +1,57 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class AdventureAventura : MonoBehaviour
+{
+    
+    [SerializeField] private Text textComponentStory;
+    [SerializeField] private Image storyImage;
+   
+
+    [SerializeField] private States startingState;
+    private States currentState;
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        textComponentStory = GameObject.FindWithTag("TextGame").GetComponent<Text>();
+        storyImage = GameObject.FindWithTag("ImageGame").GetComponent<Image>();
+
+        currentState = startingState;
+
+        textComponentStory.text = currentState.GetStory();
+        storyImage.sprite = currentState.GetImageStory();
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        ManageStates();
+        
+    }
+    
+    
+    /// <summary>
+    /// Llama al siguiente estado y checa cuantas opciones tenemos para apretar el boton 1, 2 o 3 y pasar a la siguiente parte
+    /// </summary>
+    void ManageStates()
+    {
+        States[] nextState = currentState.GetNextState();
+
+        for (int index = 0; index < nextState.Length; index++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + index))
+            {
+                currentState = nextState[index];
+            }
+        }
+
+        textComponentStory.text = currentState.GetStory();
+        storyImage.sprite = currentState.GetImageStory();
+    }
+
+    
+}//class
