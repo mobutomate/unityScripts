@@ -1,0 +1,53 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class SliderTutorial : MonoBehaviour
+{
+
+    [SerializeField] private float actualValue;
+    private Slider sliderFontSize;
+
+    [SerializeField] private GameObject[] textFontSizeToChange;
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        textFontSizeToChange = GameObject.FindGameObjectsWithTag("Text");
+        sliderFontSize = GameObject.Find("SliderFont").GetComponent<Slider>();
+
+        actualValue = sliderFontSize.value;
+    }
+
+    public void FontSizeChange()
+    {
+        int sameValue = ((int) sliderFontSize.value / (int) sliderFontSize.value);
+
+        if (sliderFontSize.value > actualValue)
+        {
+            foreach (GameObject text in textFontSizeToChange)
+            {
+                text.GetComponent<Text>().fontSize += sameValue;
+            }
+
+            actualValue += sameValue;
+        }
+        
+        if (sliderFontSize.value < actualValue)
+        {
+            foreach (GameObject text in textFontSizeToChange)
+            {
+                text.GetComponent<Text>().fontSize -= sameValue;
+            }
+            
+            actualValue -= sameValue;
+        }
+        
+        
+        
+        
+    }
+
+
+}//class
