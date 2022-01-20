@@ -1,0 +1,100 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+
+
+public class GameManager : MonoBehaviour
+{
+    private GameObject panelOptions, MenuPanel, UIGamePlay, gameOver;
+    
+    [SerializeField]
+    float actualValue = 1;
+
+    [SerializeField] private GameObject[] TextoSizeToChange;
+    [SerializeField] private Slider sliderTextSizeValue;
+
+    
+    public bool playing;
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        panelOptions = GameObject.FindWithTag("OptionsPanel");
+        MenuPanel = GameObject.FindWithTag("MenuPanel");
+        gameOver = GameObject.FindWithTag("GameOverPanel");
+        UIGamePlay = GameObject.FindWithTag("UIGamePlay");
+        TextoSizeToChange = GameObject.FindGameObjectsWithTag("Textsize");
+        sliderTextSizeValue = GameObject.FindWithTag("SliderSize").GetComponent<Slider>();
+        gameOver.SetActive(false);
+        UIGamePlay.SetActive(false);
+        panelOptions.SetActive(false);
+        
+        
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+        
+    }
+
+    public void PanelOptionsOn()
+    {
+        panelOptions.SetActive(true);
+    }
+    public void PanelOptionsOff()
+    {
+        panelOptions.SetActive(false);
+    }
+
+    public void PlayGame()
+    {
+        playing = true;
+        MenuPanel.SetActive(false);
+        UIGamePlay.SetActive(true);
+    }
+
+    public void TextSize()
+    {
+        int valoruno =
+            (int) sliderTextSizeValue.value / (int) sliderTextSizeValue.value;
+
+        if (sliderTextSizeValue.value > actualValue)
+        {
+            actualValue += valoruno;
+            foreach (GameObject texto in TextoSizeToChange)
+            {
+                texto.GetComponent<Text>().fontSize += valoruno;
+            }
+        }
+        if (sliderTextSizeValue.value < actualValue)
+        {
+            actualValue -= valoruno;
+            
+            foreach (GameObject texto in TextoSizeToChange)
+            {
+                texto.GetComponent<Text>().fontSize -= valoruno;
+            }
+        }
+
+    }
+
+
+    public void GameOverPanelOn()
+    {
+        
+        gameOver.SetActive(true);
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+    
+
+}//class
