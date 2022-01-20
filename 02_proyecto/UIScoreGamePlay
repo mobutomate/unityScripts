@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class UIScoreGamePlay : MonoBehaviour
+{
+    [SerializeField] private Text uiTextScore;
+    [SerializeField] private int totalScore = 0;
+    private string scoretxt = "Score: ";
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+        uiTextScore.text = scoretxt + totalScore.ToString();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+        
+    }
+    
+    public void AddScoreValue(int value)
+    {
+        totalScore += value;
+        uiTextScore.text = scoretxt + totalScore.ToString();
+    }
+    
+    
+}//class
