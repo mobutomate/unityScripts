@@ -1,0 +1,46 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Enemy : MonoBehaviour
+{
+    [SerializeField] private Sprite imageKill, defaultSprite;
+    private SpriteRenderer _spriteRenderer;
+
+    private GameManager gameManager;
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer.sprite = defaultSprite;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            gameManager.playing = false;
+            other.GetComponent<Player>().EnemySttack();
+            StartCoroutine(GameOverTiempo());
+            _spriteRenderer.sprite = imageKill;
+        }
+    }
+
+    IEnumerator GameOverTiempo()
+    {
+        yield return new WaitForSeconds(2);
+        gameManager.GameOverPanelOn();
+    }
+    
+    
+    
+}//class
