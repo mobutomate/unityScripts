@@ -1,0 +1,115 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Player : MonoBehaviour
+{
+    [SerializeField] private float velocidad;
+    [SerializeField] private float inputX, inputY;
+    private SpriteRenderer _sprite;
+    private Animator _animator;
+
+    private GameManager gameManager;
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+        _sprite = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (gameManager.playing)
+        {
+            Movimiento();    
+        }
+        else
+        {
+            
+            return;
+            
+        }
+        
+    }
+
+    void Movimiento()
+    {
+        inputX = Input.GetAxis("Horizontal");
+        inputY = Input.GetAxis("Vertical");
+        
+        //movimiento horizontal
+        if (inputX > Mathf.Epsilon)
+        {
+            this.transform.position = new Vector2(MovimientoX(velocidad),
+                this.transform.position.y);
+            _sprite.flipX = false;
+            _animator.SetFloat("Xposition", 1);
+            
+        }
+        if (inputX < -Mathf.Epsilon)
+        {
+            this.transform.position = new Vector2(MovimientoX(-velocidad),
+                this.transform.position.y);
+            _sprite.flipX = true;
+            _animator.SetFloat("Xposition", -1);
+            
+        }
+
+        //movimiento vertical
+        if (inputY > Mathf.Epsilon)
+        {
+            this.transform.position = new Vector2(this.transform.position.x, MovimientoY(velocidad));
+            _animator.SetFloat("Yposition", 1);
+        }
+        
+        if (inputY < -Mathf.Epsilon)
+        {
+            this.transform.position = new Vector2(this.transform.position.x, MovimientoY(-velocidad));
+            _animator.SetFloat("Yposition", -1);
+        }
+
+        if (inputX == 0)
+        {
+            _animator.SetFloat("Xposition", 0);
+            
+        }
+        if (inputY == 0)
+        {
+            _animator.SetFloat("Yposition", 0);
+            
+        }
+        
+
+    }
+
+    float MovimientoX(float speed)
+    {
+        
+        return this.transform.position.x + speed * Time.deltaTime;
+        
+    }
+    
+    float MovimientoY(float speed)
+    {
+        
+        return this.transform.position.y + speed * Time.deltaTime;
+        
+    }
+
+
+    public void EnemySttack()
+    {
+        _animator.Play("Scared");
+        
+    }
+    
+    public void FallEnemy()
+    {
+        
+        _animator.Play("ScaredFall");
+    }
+    
+}//class
