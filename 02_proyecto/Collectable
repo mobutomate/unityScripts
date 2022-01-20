@@ -1,0 +1,29 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Collectable : MonoBehaviour
+{
+    private UIScoreGamePlay _uiScoreGamePlay;
+    
+    private void Start()
+    {
+        _uiScoreGamePlay = FindObjectOfType<UIScoreGamePlay>();
+    }
+    
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Pollito"))
+        {
+            int value = 5;
+            _uiScoreGamePlay.AddScoreValue(value);
+            Destroy(other.gameObject);
+            
+        }
+
+    }
+}//class
